@@ -3,8 +3,8 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-VERSION="${VERSION:-0.1.2}"
-APP_NAME="Edifier Controller"
+VERSION="${VERSION:-0.1.3}"
+APP_NAME="Edf Controller"
 EXECUTABLE_NAME="EdifierController"
 BUILD_DIR="$ROOT_DIR/.build/app"
 APP_DIR="$ROOT_DIR/dist/$APP_NAME.app"

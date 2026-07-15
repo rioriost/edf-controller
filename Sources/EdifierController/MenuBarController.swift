@@ -38,9 +38,9 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     private func configureStatusItem() {
         statusItem.button?.image = NSImage(
             systemSymbolName: "hifispeaker.2.fill",
-            accessibilityDescription: "Edifier Controller"
+            accessibilityDescription: "Edf Controller"
         )
-        statusItem.button?.toolTip = "Edifier Controller"
+        statusItem.button?.toolTip = "Edf Controller"
         statusItem.menu = menu
     }
 
@@ -136,7 +136,7 @@ final class MenuBarController: NSObject, NSMenuDelegate {
     ) {
         let enabled = state.isReady
         statusItem.button?.appearsDisabled = !enabled
-        statusItem.button?.toolTip = "Edifier Controller — \(state.description)"
+        statusItem.button?.toolTip = "Edf Controller — \(state.description)"
 
         for (value, item) in sourceItems {
             item.isEnabled = enabled

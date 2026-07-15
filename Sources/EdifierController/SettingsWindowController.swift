@@ -7,7 +7,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         let view = SettingsView(speakerController: speakerController)
         let hostingController = NSHostingController(rootView: view)
         let window = NSWindow(contentViewController: hostingController)
-        window.title = "Edifier Controller Settings"
+        window.title = "Edf Controller Settings"
         window.styleMask = [.titled, .closable]
         window.setContentSize(NSSize(width: 440, height: 240))
         window.center()

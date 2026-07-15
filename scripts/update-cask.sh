@@ -12,7 +12,7 @@ VERSION="$1"
 SHA256="$2"
 RELEASE_BASE_URL="${3%/}"
 HOMEPAGE="$4"
-OUTPUT="${5:-$ROOT_DIR/../homebrew-cask/Casks/edifier-controller.rb}"
+OUTPUT="${5:-$ROOT_DIR/../homebrew-cask/Casks/edf-controller.rb}"
 
 if [[ ! "$SHA256" =~ '^[0-9a-f]{64}$' ]]; then
   print -u2 "SHA256 must contain exactly 64 lowercase hexadecimal characters."
@@ -20,7 +20,7 @@ if [[ ! "$SHA256" =~ '^[0-9a-f]{64}$' ]]; then
 fi
 
 mkdir -p "${OUTPUT:h}"
-cp "$ROOT_DIR/packaging/homebrew/edifier-controller.rb.template" "$OUTPUT"
+cp "$ROOT_DIR/packaging/homebrew/edf-controller.rb.template" "$OUTPUT"
 sed -i '' \
   -e "s|__VERSION__|$VERSION|g" \
   -e "s|__SHA256__|$SHA256|g" \

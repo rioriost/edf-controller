@@ -1,23 +1,23 @@
-# Edifier Controller
+# Edf Controller
 
 Edifier S880DB MKIIをmacOSのメニューバーから操作するネイティブアプリです。
 
-![Edifier Controller menu](images/ScreenShot.png)
+![Edf Controller menu](images/ScreenShot.png)
 
 ## インストール
 
 [Homebrew](https://brew.sh/)を使用してインストールします。
 
 ```sh
-brew install --cask rioriost/cask/edifier-controller
-open -a "Edifier Controller"
+brew install --cask rioriost/cask/edf-controller
+open -a "Edf Controller"
 ```
 
 初回起動時にmacOSから確認された場合は、Bluetoothの使用を許可してください。更新は次のコマンドで行えます。
 
 ```sh
 brew update
-brew upgrade --cask edifier-controller
+brew upgrade --cask edf-controller
 ```
 
 ## メニュー
@@ -47,13 +47,13 @@ brew upgrade --cask edifier-controller
 ```sh
 make check
 make app
-open "dist/Edifier Controller.app"
+open "dist/Edf Controller.app"
 ```
 
 `build-app.sh`はarm64とx86_64を含むUniversal Binaryを生成し、通常はad-hoc署名します。Developer IDで署名する場合は次のように指定します。
 
 ```sh
-make app-signed VERSION=0.1.2
+make app-signed VERSION=0.1.3
 ```
 
 ## NotarizeとHomebrew cask
@@ -70,12 +70,12 @@ xcrun notarytool store-credentials git-labeler-notary \
 `git-labeler`と同じKeychain profile名を既定値として使用します。リリース先の既定値は`https://github.com/rioriost/edf-controller`です。
 
 ```sh
-make notarize-macos VERSION=0.1.2
+make notarize-macos VERSION=0.1.3
 ```
 
-別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.2/EdifierController-0.1.2.zip`を配置できる形式にします。
+別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.3/EdfController-0.1.3.zip`を配置できる形式にします。
 
-この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edifier-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。
+この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edf-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。
 
 Notarizationの手順はAppleの[Notarizing macOS software before distribution](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)および[Developer ID](https://developer.apple.com/developer-id/)に準拠しています。caskの記述は[Homebrew Cask Cookbook](https://docs.brew.sh/Cask-Cookbook)を参照してください。
 

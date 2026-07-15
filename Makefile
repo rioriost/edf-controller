@@ -1,9 +1,9 @@
-VERSION ?= 0.1.2
+VERSION ?= 0.1.3
 NOTARY_PROFILE ?= git-labeler-notary
 CODESIGN_IDENTITY ?= Developer ID Application: Ryo Fujita (23889H77KX)
 CASK_RELEASE_BASE_URL ?= https://github.com/rioriost/edf-controller/releases/download
 CASK_HOMEPAGE ?= https://github.com/rioriost/edf-controller
-CASK_OUTPUT ?= ../homebrew-cask/Casks/edifier-controller.rb
+CASK_OUTPUT ?= ../homebrew-cask/Casks/edf-controller.rb
 
 .PHONY: build test check app app-signed notarize-macos clean
 

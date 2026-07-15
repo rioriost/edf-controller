@@ -3,18 +3,18 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-: "${VERSION:?Set VERSION, for example VERSION=0.1.2}"
+: "${VERSION:?Set VERSION, for example VERSION=0.1.3}"
 
 NOTARY_PROFILE="${NOTARY_PROFILE:-git-labeler-notary}"
 export CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY:-Developer ID Application: Ryo Fujita (23889H77KX)}"
 export CASK_RELEASE_BASE_URL="${CASK_RELEASE_BASE_URL:-https://github.com/rioriost/edf-controller/releases/download}"
 export CASK_HOMEPAGE="${CASK_HOMEPAGE:-https://github.com/rioriost/edf-controller}"
-export CASK_OUTPUT="${CASK_OUTPUT:-$ROOT_DIR/../homebrew-cask/Casks/edifier-controller.rb}"
+export CASK_OUTPUT="${CASK_OUTPUT:-$ROOT_DIR/../homebrew-cask/Casks/edf-controller.rb}"
 
-APP_NAME="Edifier Controller"
+APP_NAME="Edf Controller"
 APP_DIR="$ROOT_DIR/dist/$APP_NAME.app"
-ARCHIVE="$ROOT_DIR/dist/EdifierController-$VERSION.zip"
-SUBMISSION_ARCHIVE="$ROOT_DIR/dist/EdifierController-$VERSION-submission.zip"
+ARCHIVE="$ROOT_DIR/dist/EdfController-$VERSION.zip"
+SUBMISSION_ARCHIVE="$ROOT_DIR/dist/EdfController-$VERSION-submission.zip"
 
 VERSION="$VERSION" "$ROOT_DIR/scripts/build-app.sh"
 
