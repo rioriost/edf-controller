@@ -47,7 +47,7 @@ Apple IDとapp-specific passwordをKeychainへ一度だけ登録します。認�
 ```sh
 xcrun notarytool store-credentials git-labeler-notary \
   --apple-id "APPLE_ID" \
-  --team-id "23889H77KX" \
+  --team-id "" \
   --password "APP_SPECIFIC_PASSWORD"
 ```
 
@@ -69,4 +69,8 @@ Notarizationの手順はAppleの[Notarizing macOS software before distribution](
 
 ## 注意
 
-本アプリはEdifierの非公開BLEプロトコルを解析して実装した非公式ツールです。現時点ではS880DB MKIIのみを対象としています。
+本アプリは非公式ツールです。現時点ではS880DB MKIIのみを対象としています。
+
+## License
+
+本ソフトウェアは[MIT License](LICENSE)で公開しています。
