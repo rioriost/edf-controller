@@ -52,6 +52,7 @@ final class SpeakerController: NSObject, ObservableObject {
     @Published private(set) var volume: Int = 0
     @Published private(set) var maximumVolume: Int = 30
     @Published private(set) var selectedSpeakerID: UUID?
+    @Published private(set) var customEQGains: [Double] = CustomEQCodec.neutralGains
 
     private static let selectedSpeakerKey = "SelectedSpeakerIdentifier"
     private static let automaticSelection = "automatic"
@@ -66,6 +67,7 @@ final class SpeakerController: NSObject, ObservableObject {
     private var writeInFlight = false
     private var autoConnectWorkItem: DispatchWorkItem?
     private var volumeWorkItem: DispatchWorkItem?
+    private var customEQWorkItems: [Int: DispatchWorkItem] = [:]
 
     override init() {
         let stored = UserDefaults.standard.string(forKey: Self.selectedSpeakerKey)
@@ -115,6 +117,7 @@ final class SpeakerController: NSObject, ObservableObject {
         enqueue(.sourceStatus)
         enqueue(.volumeRead)
         enqueue(.eqStatus)
+        enqueue(.customEQRead)
     }
 
     func selectSource(_ source: SpeakerSource) {
@@ -139,6 +142,36 @@ final class SpeakerController: NSObject, ObservableObject {
             self.enqueue(.volumeWrite, payload: Data([UInt8(clamped)]))
         }
         volumeWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.08, execute: workItem)
+    }
+
+    func refreshCustomEQ() {
+        guard connectionState.isReady else { return }
+        enqueue(.customEQRead)
+    }
+
+    func setCustomEQGain(bandIndex: Int, gain: Double) {
+        guard connectionState.isReady,
+              customEQGains.indices.contains(bandIndex),
+              let payload = CustomEQCodec.writePayload(bandIndex: bandIndex, gain: gain)
+        else { return }
+
+        let normalized = CustomEQCodec.normalizedGain(gain)
+        var updatedGains = customEQGains
+        updatedGains[bandIndex] = normalized
+        customEQGains = updatedGains
+
+        if eq != .customized {
+            selectEQ(.customized)
+        }
+
+        customEQWorkItems[bandIndex]?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self else { return }
+            self.customEQWorkItems[bandIndex] = nil
+            self.enqueue(.customEQWrite, payload: payload)
+        }
+        customEQWorkItems[bandIndex] = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.08, execute: workItem)
     }
 
@@ -207,6 +240,9 @@ final class SpeakerController: NSObject, ObservableObject {
         writeInFlight = false
         source = nil
         eq = nil
+        customEQWorkItems.values.forEach { $0.cancel() }
+        customEQWorkItems = [:]
+        customEQGains = CustomEQCodec.neutralGains
     }
 
     private func enqueue(_ command: EdifierCommand, payload: Data = Data()) {
@@ -246,6 +282,10 @@ final class SpeakerController: NSObject, ObservableObject {
         case EdifierCommand.eqStatus.rawValue, EdifierCommand.eqWrite.rawValue:
             if let value = message.payload.first {
                 eq = SpeakerEQ(rawValue: value)
+            }
+        case EdifierCommand.customEQRead.rawValue:
+            if let gains = try? CustomEQCodec.decodeReadPayload(message.payload) {
+                customEQGains = gains
             }
         default:
             break

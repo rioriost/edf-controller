@@ -3,7 +3,7 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-: "${VERSION:?Set VERSION, for example VERSION=0.1.3}"
+: "${VERSION:?Set VERSION, for example VERSION=0.1.4}"
 
 NOTARY_PROFILE="${NOTARY_PROFILE:-git-labeler-notary}"
 export CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY:-Developer ID Application: Ryo Fujita (23889H77KX)}"
