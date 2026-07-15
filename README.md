@@ -4,6 +4,22 @@ Edifier S880DB MKIIをmacOSのメニューバーから操作するネイティ�
 
 ![Edifier Controller menu](images/ScreenShot.png)
 
+## インストール
+
+[Homebrew](https://brew.sh/)を使用してインストールします。
+
+```sh
+brew install --cask rioriost/cask/edifier-controller
+open -a "Edifier Controller"
+```
+
+初回起動時にmacOSから確認された場合は、Bluetoothの使用を許可してください。更新は次のコマンドで行えます。
+
+```sh
+brew update
+brew upgrade --cask edifier-controller
+```
+
 ## メニュー
 
 - `Source`: USB Audio Streaming / Line In 1 / Line In 2 / Bluetooth / Optical / Coaxial
@@ -59,11 +75,7 @@ make notarize-macos VERSION=0.1.1
 
 別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.1/EdifierController-0.1.1.zip`を配置できる形式にします。
 
-この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edifier-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。ZIPをGitHub Releaseへ公開した後は次の形式でインストールできます。
-
-```sh
-brew install --cask rioriost/cask/edifier-controller
-```
+この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edifier-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。
 
 Notarizationの手順はAppleの[Notarizing macOS software before distribution](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)および[Developer ID](https://developer.apple.com/developer-id/)に準拠しています。caskの記述は[Homebrew Cask Cookbook](https://docs.brew.sh/Cask-Cookbook)を参照してください。
 
