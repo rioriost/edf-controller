@@ -1,6 +1,8 @@
 # Edifier Controller
 
-Edifier S880DB MKIIをmacOSのメニューバーから操作するネイティブアプリです。公式EDIFIER ConneXアプリのBLE通信キャプチャから、音源、EQ、音量の操作プロトコルを実装しています。
+Edifier S880DB MKIIをmacOSのメニューバーから操作するネイティブアプリです。
+
+![Edifier Controller menu](images/ScreenShot.png)
 
 ## メニュー
 
