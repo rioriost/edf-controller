@@ -1,4 +1,4 @@
-VERSION ?= 0.1.0
+VERSION ?= 0.1.1
 NOTARY_PROFILE ?= git-labeler-notary
 CODESIGN_IDENTITY ?= Developer ID Application: Ryo Fujita (23889H77KX)
 CASK_RELEASE_BASE_URL ?= https://github.com/rioriost/edf-controller/releases/download

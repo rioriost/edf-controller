@@ -23,9 +23,9 @@ public enum SpeakerSource: UInt8, CaseIterable, Identifiable, Sendable {
 }
 
 public enum SpeakerEQ: UInt8, CaseIterable, Identifiable, Sendable {
-    case monitor = 0
-    case dynamic = 1
-    case classic = 2
+    case monitor = 1
+    case dynamic = 2
+    case classic = 0
     case vocal = 3
     case customized = 4
 
