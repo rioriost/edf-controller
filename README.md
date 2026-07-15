@@ -1,0 +1,70 @@
+# Edifier Controller
+
+Edifier S880DB MKIIをmacOSのメニューバーから操作するネイティブアプリです。公式EDIFIER ConneXアプリのBLE通信キャプチャから、音源、EQ、音量の操作プロトコルを実装しています。
+
+## メニュー
+
+- `Source`: USB Audio Streaming / Line In 1 / Line In 2 / Bluetooth / Optical / Coaxial
+- `EQ`: Monitor / Dynamic / Classic / Vocal / Customized
+- `Volume`: SF Symbolsの小・大スピーカーアイコンとスライダー
+- `Settings…`: 自動選択または特定のスピーカーを指定
+- `Quit`
+
+キーボードショートカットは割り当てていません。
+
+## Settingsを残す理由
+
+既定値は`Automatic (Recommended)`です。検出した互換スピーカーのうち電波が最も強い1台に接続するため、通常は設定不要です。
+
+一方、macOSの現在の音声出力先とCoreBluetoothで見えるBLE機器を、汎用的かつ確実に対応付けるAPIはありません。同じ機種が複数ある環境で誤ったスピーカーを操作しないよう、SettingsからCoreBluetoothの機器IDを固定できます。固定した機器が見つからない場合、別の機器へはフォールバックしません。
+
+## 必要環境
+
+- macOS 13 Ventura以降
+- Xcode 16以降（ビルド時）
+- Edifier S880DB MKII
+
+## 開発
+
+```sh
+make check
+make app
+open "dist/Edifier Controller.app"
+```
+
+`build-app.sh`はarm64とx86_64を含むUniversal Binaryを生成し、通常はad-hoc署名します。Developer IDで署名する場合は次のように指定します。
+
+```sh
+make app-signed VERSION=0.1.0
+```
+
+## NotarizeとHomebrew cask
+
+Apple IDとapp-specific passwordをKeychainへ一度だけ登録します。認証情報はリポジトリや環境変数へ保存しません。
+
+```sh
+xcrun notarytool store-credentials git-labeler-notary \
+  --apple-id "APPLE_ID" \
+  --team-id "23889H77KX" \
+  --password "APP_SPECIFIC_PASSWORD"
+```
+
+`git-labeler`と同じKeychain profile名を既定値として使用します。リリース先の既定値は`https://github.com/rioriost/edf-controller`です。
+
+```sh
+make notarize-macos VERSION=0.1.0
+```
+
+別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.0/EdifierController-0.1.0.zip`を配置できる形式にします。
+
+この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edifier-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。ZIPをGitHub Releaseへ公開した後は次の形式でインストールできます。
+
+```sh
+brew install --cask rioriost/cask/edifier-controller
+```
+
+Notarizationの手順はAppleの[Notarizing macOS software before distribution](https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution)および[Developer ID](https://developer.apple.com/developer-id/)に準拠しています。caskの記述は[Homebrew Cask Cookbook](https://docs.brew.sh/Cask-Cookbook)を参照してください。
+
+## 注意
+
+本アプリはEdifierの非公開BLEプロトコルを解析して実装した非公式ツールです。現時点ではS880DB MKIIのみを対象としています。
