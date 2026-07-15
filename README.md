@@ -53,7 +53,7 @@ open "dist/Edifier Controller.app"
 `build-app.sh`はarm64とx86_64を含むUniversal Binaryを生成し、通常はad-hoc署名します。Developer IDで署名する場合は次のように指定します。
 
 ```sh
-make app-signed VERSION=0.1.1
+make app-signed VERSION=0.1.2
 ```
 
 ## NotarizeとHomebrew cask
@@ -70,10 +70,10 @@ xcrun notarytool store-credentials git-labeler-notary \
 `git-labeler`と同じKeychain profile名を既定値として使用します。リリース先の既定値は`https://github.com/rioriost/edf-controller`です。
 
 ```sh
-make notarize-macos VERSION=0.1.1
+make notarize-macos VERSION=0.1.2
 ```
 
-別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.1/EdifierController-0.1.1.zip`を配置できる形式にします。
+別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.2/EdifierController-0.1.2.zip`を配置できる形式にします。
 
 この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edifier-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。
 
