@@ -1,6 +1,8 @@
-VERSION ?= 0.1.5
+VERSION ?= 0.1.6
 NOTARY_PROFILE ?= git-labeler-notary
 CODESIGN_IDENTITY ?= Developer ID Application: Ryo Fujita (23889H77KX)
+BUNDLE_IDENTIFIER ?= jp.rifujita.edf-controller
+DEV_BUNDLE_IDENTIFIER ?= jp.rifujita.edf-controller.dev
 CASK_RELEASE_BASE_URL ?= https://github.com/rioriost/edf-controller/releases/download
 CASK_HOMEPAGE ?= https://github.com/rioriost/edf-controller
 CASK_OUTPUT ?= ../homebrew-cask/Casks/edf-controller.rb
@@ -19,12 +21,16 @@ check:
 	plutil -lint Resources/Info.plist
 
 app:
-	VERSION="$(VERSION)" scripts/build-app.sh
+	BUNDLE_IDENTIFIER="$(DEV_BUNDLE_IDENTIFIER)" VERSION="$(VERSION)" scripts/build-app.sh
 
 app-signed:
-	CODE_SIGN_IDENTITY="$(CODESIGN_IDENTITY)" VERSION="$(VERSION)" scripts/build-app.sh
+	BUNDLE_IDENTIFIER="$(BUNDLE_IDENTIFIER)" \
+	CODE_SIGN_IDENTITY="$(CODESIGN_IDENTITY)" \
+	VERSION="$(VERSION)" \
+	scripts/build-app.sh
 
 notarize-macos:
+	BUNDLE_IDENTIFIER="$(BUNDLE_IDENTIFIER)" \
 	CODE_SIGN_IDENTITY="$(CODESIGN_IDENTITY)" \
 	NOTARY_PROFILE="$(NOTARY_PROFILE)" \
 	CASK_RELEASE_BASE_URL="$(CASK_RELEASE_BASE_URL)" \

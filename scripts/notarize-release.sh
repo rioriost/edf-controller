@@ -3,9 +3,10 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-: "${VERSION:?Set VERSION, for example VERSION=0.1.5}"
+: "${VERSION:?Set VERSION, for example VERSION=0.1.6}"
 
 NOTARY_PROFILE="${NOTARY_PROFILE:-git-labeler-notary}"
+export BUNDLE_IDENTIFIER="${BUNDLE_IDENTIFIER:-jp.rifujita.edf-controller}"
 export CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY:-Developer ID Application: Ryo Fujita (23889H77KX)}"
 export CASK_RELEASE_BASE_URL="${CASK_RELEASE_BASE_URL:-https://github.com/rioriost/edf-controller/releases/download}"
 export CASK_HOMEPAGE="${CASK_HOMEPAGE:-https://github.com/rioriost/edf-controller}"

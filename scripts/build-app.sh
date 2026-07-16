@@ -3,7 +3,8 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-VERSION="${VERSION:-0.1.5}"
+VERSION="${VERSION:-0.1.6}"
+BUNDLE_IDENTIFIER="${BUNDLE_IDENTIFIER:-jp.rifujita.edf-controller.dev}"
 APP_NAME="Edf Controller"
 EXECUTABLE_NAME="EdifierController"
 BUILD_DIR="$ROOT_DIR/.build/app"
@@ -43,6 +44,7 @@ iconutil -c icns "$ICONSET_DIR" -o "$CONTENTS_DIR/Resources/AppIcon.icns"
 
 /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$CONTENTS_DIR/Info.plist"
 /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $VERSION" "$CONTENTS_DIR/Info.plist"
+/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier $BUNDLE_IDENTIFIER" "$CONTENTS_DIR/Info.plist"
 
 if [[ "$IDENTITY" == "-" ]]; then
   codesign --force --sign - "$APP_DIR"

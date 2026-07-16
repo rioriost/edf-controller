@@ -9,9 +9,14 @@ final class LoginItemController: ObservableObject {
     @Published private(set) var statusMessage: String?
 
     private let service: SMAppService
+    private let isDevelopmentBuild: Bool
 
-    init(service: SMAppService = .mainApp) {
+    init(
+        service: SMAppService = .mainApp,
+        bundleIdentifier: String? = Bundle.main.bundleIdentifier
+    ) {
         self.service = service
+        isDevelopmentBuild = bundleIdentifier?.hasSuffix(".dev") == true
         refresh()
     }
 
@@ -39,17 +44,22 @@ final class LoginItemController: ObservableObject {
     }
 
     private func updateState() {
+        if isDevelopmentBuild {
+            isEnabled = false
+            isAvailable = false
+            statusMessage = "Launch at Login is unavailable for development builds."
+            return
+        }
+
         let status = service.status
         isEnabled = status == .enabled
-        isAvailable = status != .notFound
+        isAvailable = true
 
         switch status {
-        case .notRegistered, .enabled:
+        case .notRegistered, .enabled, .notFound:
             statusMessage = nil
         case .requiresApproval:
             statusMessage = "Allow Edf Controller in System Settings > General > Login Items."
-        case .notFound:
-            statusMessage = "Launch at Login is unavailable for this copy of Edf Controller."
         @unknown default:
             statusMessage = "Launch at Login status is unavailable."
         }
