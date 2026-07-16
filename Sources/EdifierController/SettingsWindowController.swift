@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import EdifierCore
 import SwiftUI
 
@@ -10,7 +11,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         let window = NSWindow(contentViewController: hostingController)
         window.title = "Edf Controller Settings"
         window.styleMask = [.titled, .closable]
-        window.setContentSize(NSSize(width: 520, height: 500))
+        window.setContentSize(NSSize(width: 520, height: 580))
         window.center()
         window.isReleasedWhenClosed = false
         super.init(window: window)
@@ -25,6 +26,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
 
 private struct SettingsView: View {
     @ObservedObject var speakerController: SpeakerController
+    @StateObject private var loginItemController = LoginItemController()
 
     private let bandLabels = ["62 Hz", "250 Hz", "1 kHz", "4 kHz", "8 kHz", "16 kHz"]
 
@@ -40,6 +42,13 @@ private struct SettingsView: View {
                     speakerController.selectSpeaker(id: id)
                 }
             }
+        )
+    }
+
+    private var launchAtLogin: Binding<Bool> {
+        Binding(
+            get: { loginItemController.isEnabled },
+            set: { loginItemController.setEnabled($0) }
         )
     }
 
@@ -62,6 +71,19 @@ private struct SettingsView: View {
 
     var body: some View {
         Form {
+            VStack(alignment: .leading, spacing: 6) {
+                Toggle("Launch at Login", isOn: launchAtLogin)
+                    .toggleStyle(.checkbox)
+                    .disabled(!loginItemController.isAvailable)
+
+                if let statusMessage = loginItemController.statusMessage {
+                    Text(statusMessage)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+
             Picker("Speaker", selection: selection) {
                 Text("Automatic (Recommended)").tag("automatic")
                 ForEach(speakerController.discoveredSpeakers) { speaker in
@@ -131,9 +153,13 @@ private struct SettingsView: View {
         }
         .formStyle(.grouped)
         .padding(8)
-        .frame(width: 520, height: 500)
+        .frame(width: 520, height: 580)
         .onAppear {
+            loginItemController.refresh()
             speakerController.refreshCustomEQ()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            loginItemController.refresh()
         }
     }
 }
