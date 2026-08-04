@@ -53,7 +53,7 @@ open "dist/Edf Controller.app"
 `make app`はarm64とx86_64を含むUniversal Binaryを生成し、開発用Bundle ID `jp.rifujita.edf-controller.dev`でad-hoc署名します。インストール済みの本番版とLaunch Services上で競合しません。Developer IDで署名する場合は本番用Bundle IDを使用します。
 
 ```sh
-make app-signed VERSION=0.1.6
+make app-signed VERSION=0.2.0
 ```
 
 ## NotarizeとHomebrew cask
@@ -70,10 +70,10 @@ xcrun notarytool store-credentials git-labeler-notary \
 `git-labeler`と同じKeychain profile名を既定値として使用します。リリース先の既定値は`https://github.com/rioriost/edf-controller`です。
 
 ```sh
-make notarize-macos VERSION=0.1.6
+make notarize-macos VERSION=0.2.0
 ```
 
-別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.1.6/EdfController-0.1.6.zip`を配置できる形式にします。
+別のnotary profileまたは公開先を使う場合は、`NOTARY_PROFILE`、`CASK_RELEASE_BASE_URL`、`CASK_HOMEPAGE`を`make`へ指定できます。公開URLは直下へ`v0.2.0/EdfController-0.2.0.zip`を配置できる形式にします。
 
 この処理はDeveloper ID署名、notary serviceへの送信、ticketのstaple、Gatekeeper検証、配布ZIP作成を行い、実際のバージョン・SHA-256・公開URLを含む`../homebrew-cask/Casks/edf-controller.rb`を生成します。出力先は`CASK_OUTPUT`で変更できます。
 

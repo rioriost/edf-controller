@@ -3,18 +3,20 @@
 set -euo pipefail
 
 ROOT_DIR="${0:A:h:h}"
-VERSION="${VERSION:-0.1.6}"
+VERSION="${VERSION:-0.2.0}"
 BUNDLE_IDENTIFIER="${BUNDLE_IDENTIFIER:-jp.rifujita.edf-controller.dev}"
 APP_NAME="Edf Controller"
 EXECUTABLE_NAME="EdifierController"
-BUILD_DIR="$ROOT_DIR/.build/app"
-APP_DIR="$ROOT_DIR/dist/$APP_NAME.app"
+BUILD_DIR="${BUILD_DIR:-$ROOT_DIR/.build/app}"
+OUTPUT_DIR="${OUTPUT_DIR:-$ROOT_DIR/dist}"
+APP_DIR="$OUTPUT_DIR/$APP_NAME.app"
 CONTENTS_DIR="$APP_DIR/Contents"
 ICON_SOURCE="$ROOT_DIR/Resources/AppIcon.png"
 ICONSET_DIR="$BUILD_DIR/AppIcon.iconset"
 IDENTITY="${CODE_SIGN_IDENTITY:--}"
 
 rm -rf "$BUILD_DIR" "$APP_DIR"
+mkdir -p "$OUTPUT_DIR"
 
 swift build \
   --package-path "$ROOT_DIR" \
@@ -23,9 +25,27 @@ swift build \
   --arch x86_64 \
   --scratch-path "$BUILD_DIR"
 
+BINARY_PATH=""
+for candidate in \
+  "$BUILD_DIR/apple/Products/Release/$EXECUTABLE_NAME" \
+  "$BUILD_DIR/out/Products/Release/$EXECUTABLE_NAME" \
+  "$BUILD_DIR/arm64-apple-macosx/release/$EXECUTABLE_NAME" \
+  "$BUILD_DIR/release/$EXECUTABLE_NAME"
+do
+  if [[ -x "$candidate" ]]; then
+    BINARY_PATH="$candidate"
+    break
+  fi
+done
+
+if [[ -z "$BINARY_PATH" ]]; then
+  print -u2 "Built executable was not found under $BUILD_DIR"
+  exit 1
+fi
+
 mkdir -p "$CONTENTS_DIR/MacOS" "$CONTENTS_DIR/Resources"
 install -m 755 \
-  "$BUILD_DIR/apple/Products/Release/$EXECUTABLE_NAME" \
+  "$BINARY_PATH" \
   "$CONTENTS_DIR/MacOS/$EXECUTABLE_NAME"
 install -m 644 "$ROOT_DIR/Resources/Info.plist" "$CONTENTS_DIR/Info.plist"
 

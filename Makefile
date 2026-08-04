@@ -1,4 +1,4 @@
-VERSION ?= 0.1.6
+VERSION ?= 0.2.0
 NOTARY_PROFILE ?= git-labeler-notary
 CODESIGN_IDENTITY ?= Developer ID Application: Ryo Fujita (23889H77KX)
 BUNDLE_IDENTIFIER ?= jp.rifujita.edf-controller
